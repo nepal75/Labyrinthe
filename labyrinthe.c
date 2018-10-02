@@ -4,6 +4,10 @@
 
 #include "labyrinthe.h"
 
-void createTableau(Labyrinthe labyrinthe){
-
+void createLabyrinthe(Labyrinthe labyrinthe){
+    //Create wall all around
+    int i = 0;
+    while (i != labyrinthe.longueur - 1){
+        labyrinthe.tab[0][i] = 0;
+    }
 }

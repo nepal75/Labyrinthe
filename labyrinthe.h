@@ -13,6 +13,6 @@ typedef struct {
     int tab[][];
 } Labyrinthe;
 
-void createTableau(Labyrinthe lab);
+void createLabyrinthe(Labyrinthe lab);
 
 #endif //LABYRINTHE_LABYRINTHE_H
