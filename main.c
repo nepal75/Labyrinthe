@@ -3,8 +3,9 @@
 
 int main() {
     Labyrinthe labyrinthe;
-    labyrinthe.largeur = 15;
-    labyrinthe.longueur = 21;
-    printf("Hello, World!\n");
+    labyrinthe.largeur = 9;
+    labyrinthe.longueur = 23;
+    createLabyrinthe(labyrinthe);
+    afficherLabyrinthe(labyrinthe);
     return 0;
 }
