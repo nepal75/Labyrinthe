@@ -3,4 +3,4 @@ project(Labyrinthe C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(Labyrinthe main.c labyrinthe.c labyrinthe.h)
+add_executable(Labyrinthe main.c labyrinthe.c labyrinthe.h List.cpp List.c List.h)

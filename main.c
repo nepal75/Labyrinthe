@@ -1,16 +1,21 @@
 #include <stdio.h>
 #include "labyrinthe.h"
+#include "List.h"
 #include <time.h>
 
 int main() {
     Labyrinthe labyrinthe;
-    labyrinthe.largeur = 9;
-    labyrinthe.longueur = 23;
 
     Labyrinthe *lab = &labyrinthe;
 
-    initLabyrinthe(lab);
+    initLabyrinthe(lab,9,23);
+    testInitList(lab);
+    addCoordonnees(lab,1,2),
+    printf("-----------------------------------\n"),
+    testInitList(lab);
+    /*
     afficherLabyrinthe(lab);
-    //createLabyrinthe(lab);
+    createLabyrinthe(lab);*/
+
     return 0;
 }

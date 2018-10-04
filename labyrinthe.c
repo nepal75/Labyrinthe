@@ -4,8 +4,13 @@
 
 #include <stdlib.h>
 #include "labyrinthe.h"
+#include "List.h"
 
-void initLabyrinthe(Labyrinthe *lab){
+void initLabyrinthe(Labyrinthe *lab,int coord1, int coord2){
+    lab->largeur = coord1;
+    lab->longueur = coord2;
+    lab->list = NULL;
+
     //Put 0 (=wall) everywhere
     for (int i = 0;i<lab->largeur;i++){
         for(int j = 0; j<lab->longueur;j++){
@@ -19,6 +24,8 @@ void initLabyrinthe(Labyrinthe *lab){
             for (int y = 1; y < lab->longueur - 1; y++) {
                 if(y%2 == 1) {
                     lab->tab[x][y] = compteur;
+                    if(compteur == 1) lab->list = createList(1,x,y);
+                    else lab->list = addToList(compteur,x,y,lab->list);
                     compteur++;
                 }
             }
@@ -89,4 +96,16 @@ void createLabyrinthe(Labyrinthe *lab){
             }
         }
     }
+}
+
+
+void testInitList(Labyrinthe *lab){
+    myList *eList = NULL;
+    for(eList = lab->list;eList != NULL;eList = eList->next){
+        printf("valeur : %d | x : %d | y : %d\n",eList->val,eList->allCases->x,eList->allCases->y);
+    }
+}
+
+void addCoordonnesToList(Labyrinthe *lab,int coord1, int coord2){
+
 }
