@@ -58,10 +58,10 @@ int allCaseWasUsed(int tab[LARGEUR][LONGUEUR]){
 
 char isTherePassageAround(Labyrinthe *lab,int coord1,int coord2){
     char response = '0';
-    if(lab->tab[coord1][coord2-1] == 0) response = 'l';
-    else if(lab->tab[coord1][coord2+1] == 0) response = 'r';
-    else if(lab->tab[coord1-1][coord2] == 0) response ='u';
-    else if (lab->tab[coord1+1][coord2] == 0) response = 'd';
+    if(lab->tab[coord1][coord2-1] != 0) response = 'l';
+    else if(lab->tab[coord1][coord2+1] != 0) response = 'r';
+    else if(lab->tab[coord1-1][coord2] != 0) response ='u';
+    else if (lab->tab[coord1+1][coord2] != 0) response = 'd';
 
     return response;
 }
@@ -101,8 +101,12 @@ void createLabyrinthe(Labyrinthe *lab){
 
 void testInitList(Labyrinthe *lab){
     myList *eList = NULL;
-    for(eList = lab->list;eList != NULL;eList = eList->next){
-        printf("valeur : %d | x : %d | y : %d\n",eList->val,eList->allCases->x,eList->allCases->y);
+    for(eList = lab->list;eList != NULL;eList = eList->next) {
+        Coordonnes *cList = eList->allCases;
+        while (cList) {
+            printf("valeur : %d | x : %d | y : %d\n", eList->val, cList->x, cList->y);
+            cList = cList->next;
+        }
     }
 }
 

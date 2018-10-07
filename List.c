@@ -35,32 +35,35 @@ myList* addToList(int val, int x, int y, myList *list){
     return newList;
 }
 
-void testList(myList *list){
-    myList *eList = NULL;
-    for(eList = list;eList != NULL;eList = eList->next){
-        printf("valeur : %d | x : %d | y : %d\n",eList->val,eList->allCases->x,eList->allCases->y);
-    }
-}
-
-Coordonnes* addCoordonnees(myList *list,int receive,int send){
-    Coordonnes* coordR = getCoordonnees(list,receive);
+void addCoordonnees(myList *list,int receive,int send){
     Coordonnes* coordS = getCoordonnees(list,send);
-    Coordonnes* listC = createCoordonees(coordR->x,coordR->y);
-    listC->next = coordR;
-    listC->next = coordS;
-    //suppr coordS
-    return listC;
 
+    for(list ;list != NULL;list = list->next) {
+        if(list->val == receive){
+            list->allCases->next = coordS;
+            break;
+        }
+    }
+    suppCoordonnees(list,send);
 }
 
 Coordonnes* getCoordonnees(myList *list, int val){
-    myList *eList = NULL;
     Coordonnes *result;
-    for(eList = list;eList != NULL;eList = eList->next){
-        if(eList->val == val){
-            result = eList->allCases;
+    for(list;list != NULL;list = list->next){
+        if(list->val == val){
+            result = list->allCases;
             break;
         }
     }
     return result;
+}
+
+
+void suppCoordonnees(myList *list,int val){
+    for(list;list != NULL;list = list->next){
+        if(list->val == val){
+            list->val = 0;
+            break;
+        }
+    }
 }

@@ -10,7 +10,9 @@ int main() {
 
     initLabyrinthe(lab,9,23);
     testInitList(lab);
-    addCoordonnees(lab,1,2),
+    addCoordonnees(lab->list,43,42);
+    addCoordonnees(lab->list,1,3);
+    addCoordonnees(lab->list,4,1);
     printf("-----------------------------------\n"),
     testInitList(lab);
     /*
