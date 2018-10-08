@@ -21,8 +21,8 @@ typedef struct {
 void initLabyrinthe(Labyrinthe *lab,int coord1,int coord2);
 void afficherLabyrinthe(Labyrinthe *lab);
 void createLabyrinthe(Labyrinthe *lab);
+int allCaseWasUsed(int largeur, int longueur, int tab[largeur][longueur]);
 
-void addCoordonnesToList(Labyrinthe *lab,int coord1, int coord2);
 void testInitList(Labyrinthe *lab);
 
 #endif //LABYRINTHE_LABYRINTHE_H

@@ -32,4 +32,6 @@ void addCoordonnees(myList *list,int receive,int send);
 Coordonnes* getCoordonnees(myList *list, int val);
 void suppCoordonnees(myList *list,int val);
 
+int allCaseUsed(myList* list);
+
 #endif //LABYRINTHE_LIST_H

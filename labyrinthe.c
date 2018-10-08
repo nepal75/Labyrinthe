@@ -43,17 +43,24 @@ void afficherLabyrinthe(Labyrinthe *lab){
         printf("\n");
     }
 }
-int allCaseWasUsed(int tab[LARGEUR][LONGUEUR]){
-    int response = 1;
-    for (int i = 0;i<LARGEUR;i++){
-        for(int j = 0;j<LONGUEUR;j++){
-            if(tab[i][j] == 0){
-                response = 0;
-                break;
-            }
+int allCaseWasUsed(int largeur, int longueur, int tab[largeur][longueur]){
+    int i = 1;
+    int j = 1;/*
+    for(int x = 0;x<largeur;x++){
+        for(int y = 0;y<longueur;y++){
+            printf("|%d|",tab[x][y]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+    return 0;*/
+    for(i;i<largeur-1;i++){
+        for(j;j<longueur-1;j++){
+            if(tab[i][j] == 0) return 0;
         }
     }
-    return response;
+    return 1;
+    //eturn allCaseUsed(labyrinthe->list);
 }
 
 char isTherePassageAround(Labyrinthe *lab,int coord1,int coord2){
@@ -82,22 +89,52 @@ int valuesAreSame(Labyrinthe *lab,int coord1, int coord2,char direction){
     return response;
 }
 void createLabyrinthe(Labyrinthe *lab){
-    //Create an other matrice to know which case is used
-    int checkTab[LARGEUR][LONGUEUR] = {0};
-    while(allCaseWasUsed(checkTab) == 0){
+    int tab[LARGEUR][LONGUEUR] = {0};
+    allCaseWasUsed(LARGEUR,LONGUEUR,tab);
+    while(allCaseWasUsed(LARGEUR,LONGUEUR,tab) == 0){
         int random1 = rand()%(lab->largeur-2) +1;
         int random2 = rand()%(lab->longueur-2) +1;
+
         if (lab->tab[random1][random2] == 0){
             switch(isTherePassageAround(lab,random1,random2)){
                 case 'l':
                     if(valuesAreSame(lab,random1,random2,'l') == 0){
-
+                        int valueR = lab->tab[random1][random2];
+                        int valueS = lab->tab[random1][random2-1];
+                        addCoordonnees(lab->list,valueR,valueS);
                     }
+                    tab[random1][random2] = 1;
+                    break;
+                case 'r':
+                    if(valuesAreSame(lab,random1,random2,'r') == 0){
+                        int valueR = lab->tab[random1][random2];
+                        int valueS = lab->tab[random1][random2+1];
+                        addCoordonnees(lab->list,valueR,valueS);
+                    }
+                    tab[random1][random2] = 1;
+                    break;
+                case 'u':
+                    if(valuesAreSame(lab,random1,random2,'u') == 0){
+                        int valueR = lab->tab[random1][random2];
+                        int valueS = lab->tab[random1-1][random2];
+                        addCoordonnees(lab->list,valueR,valueS);
+                    }
+                    tab[random1][random2] = 1;
+                    break;
+                case 'd':
+                    if(valuesAreSame(lab,random1,random2,'d') == 0){
+                        int valueR = lab->tab[random1][random2];
+                        int valueS = lab->tab[random1+1][random2];
+                        addCoordonnees(lab->list,valueR,valueS);
+                    }
+                    tab[random1][random2] = 1;
+                    break;
+                default: tab[random1][random2] = 1;
             }
         }
+        else tab[random1][random2] = 1;
     }
 }
-
 
 void testInitList(Labyrinthe *lab){
     myList *eList = NULL;
@@ -108,8 +145,4 @@ void testInitList(Labyrinthe *lab){
             cList = cList->next;
         }
     }
-}
-
-void addCoordonnesToList(Labyrinthe *lab,int coord1, int coord2){
-
 }

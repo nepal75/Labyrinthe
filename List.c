@@ -67,3 +67,13 @@ void suppCoordonnees(myList *list,int val){
         }
     }
 }
+
+int allCaseUsed(myList* list){
+    int compteur = 0;
+    int result = 0;
+    for(list;list!=NULL;list=list->next){
+        if(list->val != 0) compteur++;
+    }
+    if (compteur == 1) result = 1;
+    return result;
+}
