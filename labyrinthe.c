@@ -78,16 +78,18 @@ int valuesAreSame(Labyrinthe *lab,int coord1, int coord2,char direction){
     int value = lab->tab[coord1][coord2];
     switch(direction){
         case 'l' : if(lab->tab[coord1][coord2-1] == value) response = 1;
-        break;
+            break;
         case 'r' : if(lab->tab[coord1][coord2+1] == value) response = 1;
-        break;
+            break;
         case 'u' : if(lab->tab[coord1-1][coord2] == value) response = 1;
-        break;
+            break;
         case 'd' : if(lab->tab[coord1+1][coord2] == value) response = 1;
-        break;
+            break;
+        default:response = 0;
     }
     return response;
 }
+
 void createLabyrinthe(Labyrinthe *lab){
     int tab[LARGEUR][LONGUEUR] = {0};
     allCaseWasUsed(LARGEUR,LONGUEUR,tab);
@@ -117,15 +119,39 @@ void createLabyrinthe(Labyrinthe *lab){
                     if(valuesAreSame(lab,random1,random2,'u') == 0){
                         int valueR = lab->tab[random1][random2];
                         int valueS = lab->tab[random1-1][random2];
+                        printf("before\n");
+                        Coordonnes *c = getCoordonnees(lab->list,valueR);
+                        for(c;c!=NULL;c = c->next){
+                            printf("x : %d y : %d\n",c->x,c->y);
+                        }
+
                         addCoordonnees(lab->list,valueR,valueS);
+
+                        Coordonnes *c2 = getCoordonnees(lab->list,valueR);
+                        printf("after\n");
+                        for(c2;c2!=NULL;c2 = c2->next){
+                            printf("x : %d y : %d\n",c2->x,c2->y);
+                        }
                     }
                     tab[random1][random2] = 1;
                     break;
                 case 'd':
+                    printf("%d\n",valuesAreSame(lab,random1,random2,'d'));
                     if(valuesAreSame(lab,random1,random2,'d') == 0){
                         int valueR = lab->tab[random1][random2];
                         int valueS = lab->tab[random1+1][random2];
+                        Coordonnes *c = getCoordonnees(lab->list,valueR);
+                        printf("Bite\n");
+                        while(c->next!=NULL){
+                            printf("x : %d y : %d\n",c->x,c->y);
+                            c = c->next;
+                        }
                         addCoordonnees(lab->list,valueR,valueS);
+                        c = getCoordonnees(lab->list,valueR);
+                        while(c->next!=NULL){
+                            printf("x : %d y : %d\n",c->x,c->y);
+                            c = c->next;
+                        }
                     }
                     tab[random1][random2] = 1;
                     break;
@@ -143,6 +169,15 @@ void testInitList(Labyrinthe *lab){
         while (cList) {
             printf("valeur : %d | x : %d | y : %d\n", eList->val, cList->x, cList->y);
             cList = cList->next;
+        }
+    }
+}
+
+void loadTab(Labyrinthe *lab){
+    for(lab->list;lab->list!=NULL;lab->list = lab->list->next){
+        while(lab->list->allCases->next != NULL){
+            lab->tab[lab->list->allCases->x][lab->list->allCases->y] = lab->list->val;
+            lab->list->allCases = lab->list->allCases->next;
         }
     }
 }

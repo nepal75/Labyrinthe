@@ -17,9 +17,10 @@ int main() {
     addCoordonnees(lab->list,4,1);*/
     printf("--------------------------------------------------------------------------------------------\n");
     createLabyrinthe(lab);
+    loadTab(lab);
     afficherLabyrinthe(lab);
+    /*S
     testInitList(lab);
-    /*
     afficherLabyrinthe(lab);
     createLabyrinthe(lab);*/
 
