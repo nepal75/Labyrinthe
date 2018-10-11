@@ -11,11 +11,10 @@
 #include <time.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 
 int printMenu();
-
 void redirect(int choix);
-
 void newLabyrinthe();
-
+void createFile(Plateau *plateau);
 #endif //LABYRINTHE_MENU_H

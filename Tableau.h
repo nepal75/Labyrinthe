@@ -12,6 +12,7 @@ typedef struct {
     int x;
     int y;
     int **tab;
+    char nom[10];
 } Plateau;
 
 //Initialize each cell to 0
