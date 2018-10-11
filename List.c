@@ -77,3 +77,14 @@ int allCaseUsed(myList* list){
     if (compteur == 1) result = 1;
     return result;
 }
+
+void addOneCoordonnee(myList *list,int val, int x, int y){
+    for(list;list!=NULL;list = list->next){
+        if(list->val == val){
+            Coordonnes *c = createCoordonees(x,y);
+            c->next = list->allCases->next;
+            list->allCases->next = c;
+            return;
+        }
+    }
+}

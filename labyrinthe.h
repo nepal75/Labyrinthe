@@ -22,7 +22,9 @@ void initLabyrinthe(Labyrinthe *lab,int coord1,int coord2);
 void afficherLabyrinthe(Labyrinthe *lab);
 void createLabyrinthe(Labyrinthe *lab);
 int allCaseWasUsed(int largeur, int longueur, int tab[largeur][longueur]);
-void loadTab(Labyrinthe *lab);
+void loadTab(Labyrinthe *lab,int val);
 void testInitList(Labyrinthe *lab);
+char isThereValueArroundThisWall(char ref,Labyrinthe *lab,int x, int y, int val);
+void addSecondCheck(char refSecond,int x, int y,Labyrinthe *lab,int val);
 
 #endif //LABYRINTHE_LABYRINTHE_H

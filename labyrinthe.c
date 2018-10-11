@@ -92,69 +92,65 @@ int valuesAreSame(Labyrinthe *lab,int coord1, int coord2,char direction){
 
 void createLabyrinthe(Labyrinthe *lab){
     int tab[LARGEUR][LONGUEUR] = {0};
+    int tabRandom[LARGEUR][LONGUEUR] = {0};
     allCaseWasUsed(LARGEUR,LONGUEUR,tab);
     while(allCaseWasUsed(LARGEUR,LONGUEUR,tab) == 0){
-        int random1 = rand()%(lab->largeur-2) +1;
-        int random2 = rand()%(lab->longueur-2) +1;
 
-        if (lab->tab[random1][random2] == 0){
+        int random1 = rand()%(LARGEUR-2)+1;
+        int random2 = rand()%(LONGUEUR-2)+1;
+
+        tabRandom[random1][random2] = 1;
+
+        int valueR = lab->tab[random1][random2];
+        int valueS;
+        char secondCheck;
+
+        if (valueR == 0){
             switch(isTherePassageAround(lab,random1,random2)){
                 case 'l':
-                    if(valuesAreSame(lab,random1,random2,'l') == 0){
-                        int valueR = lab->tab[random1][random2];
-                        int valueS = lab->tab[random1][random2-1];
-                        addCoordonnees(lab->list,valueR,valueS);
-                    }
-                    tab[random1][random2] = 1;
-                    break;
+                        valueS = lab->tab[random1][random2-1];
+                        secondCheck = isThereValueArroundThisWall('l',lab,random1,random2,valueS);
+                        if(secondCheck != 'o'){
+                            addOneCoordonnee(lab->list,valueS,random1,random2);
+                            lab->tab[random1][random2] = valueS;
+                            addSecondCheck(secondCheck,random1,random2,lab,valueS);
+                        }
+
+                        tab[random1][random2] = 1;
+                        break;
                 case 'r':
-                    if(valuesAreSame(lab,random1,random2,'r') == 0){
-                        int valueR = lab->tab[random1][random2];
-                        int valueS = lab->tab[random1][random2+1];
-                        addCoordonnees(lab->list,valueR,valueS);
-                    }
-                    tab[random1][random2] = 1;
-                    break;
+                        valueS = lab->tab[random1][random2+1];
+                        secondCheck = isThereValueArroundThisWall('r',lab,random1,random2,valueS);
+                        if(secondCheck != 'o'){
+                            addOneCoordonnee(lab->list,valueS,random1,random2);
+                            lab->tab[random1][random2] = valueS;
+                            addSecondCheck(secondCheck,random1,random2,lab,valueS);
+                        }
+
+                        tab[random1][random2] = 1;
+                        break;
                 case 'u':
-                    if(valuesAreSame(lab,random1,random2,'u') == 0){
-                        int valueR = lab->tab[random1][random2];
-                        int valueS = lab->tab[random1-1][random2];
-                        printf("before\n");
-                        Coordonnes *c = getCoordonnees(lab->list,valueR);
-                        for(c;c!=NULL;c = c->next){
-                            printf("x : %d y : %d\n",c->x,c->y);
+                        valueS = lab->tab[random1-1][random2];
+                        secondCheck = isThereValueArroundThisWall('u',lab,random1,random2,valueS);
+                        if(secondCheck != 'o'){
+                            addOneCoordonnee(lab->list,valueS,random1,random2);
+                            lab->tab[random1][random2] = valueS;
+                            addSecondCheck(secondCheck,random1,random2,lab,valueS);
                         }
 
-                        addCoordonnees(lab->list,valueR,valueS);
-
-                        Coordonnes *c2 = getCoordonnees(lab->list,valueR);
-                        printf("after\n");
-                        for(c2;c2!=NULL;c2 = c2->next){
-                            printf("x : %d y : %d\n",c2->x,c2->y);
-                        }
-                    }
-                    tab[random1][random2] = 1;
-                    break;
+                        tab[random1][random2] = 1;
+                        break;
                 case 'd':
-                    printf("%d\n",valuesAreSame(lab,random1,random2,'d'));
-                    if(valuesAreSame(lab,random1,random2,'d') == 0){
-                        int valueR = lab->tab[random1][random2];
-                        int valueS = lab->tab[random1+1][random2];
-                        Coordonnes *c = getCoordonnees(lab->list,valueR);
-                        printf("Bite\n");
-                        while(c->next!=NULL){
-                            printf("x : %d y : %d\n",c->x,c->y);
-                            c = c->next;
+                        valueS = lab->tab[random1+1][random2];
+                        secondCheck = isThereValueArroundThisWall('d',lab,random1,random2,valueS);
+                        if(secondCheck != 'o'){
+                            addOneCoordonnee(lab->list,valueS,random1,random2);
+                            lab->tab[random1][random2] = valueS;
+                            addSecondCheck(secondCheck,random1,random2,lab,valueS);
                         }
-                        addCoordonnees(lab->list,valueR,valueS);
-                        c = getCoordonnees(lab->list,valueR);
-                        while(c->next!=NULL){
-                            printf("x : %d y : %d\n",c->x,c->y);
-                            c = c->next;
-                        }
-                    }
-                    tab[random1][random2] = 1;
-                    break;
+
+                        tab[random1][random2] = 1;
+                        break;
                 default: tab[random1][random2] = 1;
             }
         }
@@ -173,11 +169,67 @@ void testInitList(Labyrinthe *lab){
     }
 }
 
-void loadTab(Labyrinthe *lab){
+void loadTab(Labyrinthe *lab,int val){
+    int x;
+    int y;
     for(lab->list;lab->list!=NULL;lab->list = lab->list->next){
-        while(lab->list->allCases->next != NULL){
-            lab->tab[lab->list->allCases->x][lab->list->allCases->y] = lab->list->val;
-            lab->list->allCases = lab->list->allCases->next;
+        if (lab->list->val == val) {
+            while (lab->list->allCases->next != NULL && x > -1 && y > -1) {
+                x = lab->list->allCases->x;
+                y = lab->list->allCases->y;
+                if (x > -1 && y > -1) {
+                    lab->tab[x][y] = lab->list->val;
+                    lab->list->allCases = lab->list->allCases->next;
+                }
+            }
         }
     }
+}
+
+char isThereValueArroundThisWall(char ref,Labyrinthe *lab,int x, int y, int val){
+    char result = 'o';
+    switch (ref){
+        case 'l':
+            if(lab->tab[x][y+1] != 0 && lab->tab[x][y+1] != val) return 'r';
+            break;
+        case 'r':
+            if(lab->tab[x][y-1] != 0 && lab->tab[x][y-1] != val) return 'l';
+            break;
+        case 'u': if(lab->tab[x+1][y] != 0 && lab->tab[x+1][y] != val) return 'd';
+            break;
+        case 'd': if(lab->tab[x-1][y] != 0 && lab->tab[x-1][y] != val) return 'u';
+            break;
+        default: return 'o';
+    }
+    return result;
+}
+
+void addSecondCheck(char refSecond,int x, int y,Labyrinthe *lab,int val){
+    switch (refSecond){
+        case 'r':
+            addCoordonnees(lab->list,lab->tab[x][y],lab->tab[x][y+1]);
+            lab->tab[x][y+1] = val;
+            loadTab(lab,val);
+            break;
+        case 'l':
+            addCoordonnees(lab->list,lab->tab[x][y],lab->tab[x][y-1]);
+            lab->tab[x][y-1] = val;
+            loadTab(lab,val);
+            break;
+        case 'u':
+            addCoordonnees(lab->list,lab->tab[x][y],lab->tab[x-1][y]);
+            lab->tab[x-1][y] = val;
+            loadTab(lab,val);
+            break;
+        case 'd':
+            addCoordonnees(lab->list,lab->tab[x][y],lab->tab[x+1][y]);
+            lab->tab[x+1][y] = val;
+            loadTab(lab,val);
+            break;
+        default:break;
+    }
+
+    printf("value : %d\n",val);
+    afficherLabyrinthe(lab);
+    printf("\n");
 }

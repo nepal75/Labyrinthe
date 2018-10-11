@@ -1,28 +1,41 @@
 #include <stdio.h>
-#include "labyrinthe.h"
-#include "List.h"
 #include <time.h>
+#include <stdlib.h>
+#include <assert.h>
+#include "Tableau.h"
+#include "Menu.h"
 
 int main() {
     srand(time(NULL));
 
-    Labyrinthe labyrinthe;
+/*
+    Plateau *plat = malloc(sizeof(Plateau));
+    assert(plat != NULL);
 
-    Labyrinthe *lab = &labyrinthe;
 
-    initLabyrinthe(lab,9,23);
-    afficherLabyrinthe(lab);
-    /*addCoordonnees(lab->list,43,42);
-    addCoordonnees(lab->list,1,3);
-    addCoordonnees(lab->list,4,1);*/
-    printf("--------------------------------------------------------------------------------------------\n");
-    createLabyrinthe(lab);
-    loadTab(lab);
-    afficherLabyrinthe(lab);
-    /*S
-    testInitList(lab);
-    afficherLabyrinthe(lab);
-    createLabyrinthe(lab);*/
+    plat->x = 9;
+    plat->y = 23;
+
+    initPlateau_0(plat);
+
+    initPlateau_Mur(plat);
+
+    createLabyrynthe(plat);
+    afficherPlateau(plat);
+
+    Plateau plateau_2;
+    Plateau *plat_2 = &plateau_2;
+    plat_2->x = 9;
+    plat_2->y = 23;
+
+    initPlateau_0(plat_2);
+
+    initPlateau_Mur(plat_2);
+
+    createLabyrynthe(plat_2);
+    afficherPlateau(plat_2);*/
+
+    redirect(printMenu());
 
     return 0;
 }
