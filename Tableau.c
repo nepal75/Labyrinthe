@@ -53,21 +53,21 @@ void initPlateau_Mur(Plateau *plateau){
 
 
 void createLabyrynthe(Plateau *plateau){
-    int tabTest[plateau->x][plateau->y] = {0};
-    /*
-    tab = malloc(sizeof(*plateau->tab)*plateau->x);
-    assert(plateau->tab!=NULL);
+    int **tabTest;
+
+    tabTest = malloc(sizeof(*tabTest)*plateau->x);
+    assert(tabTest!=NULL);
     for(int x = 0; x<plateau->x; x++){
-        plateau->tab[x] = malloc(sizeof(int)*plateau->y);
-        assert(plateau->tab[x]!=NULL);
+        tabTest[x] = malloc(sizeof(int)*plateau->y);
+        assert(tabTest[x]!=NULL);
     }
 
     for (int i = 0;i<plateau->x;i++){
         for(int j = 0; j<plateau->y;j++){
-            plateau->tab[i][j] = 0;
+            tabTest[i][j] = 0;
         }
     }
-*/
+
     while(ifAllValueProcessed(plateau->x,plateau->y,tabTest)) {
         int r_1 = rand()%(plateau->x - 2) + 1;
         int r_2 = rand()%(plateau->y - 2) + 1;
@@ -107,14 +107,13 @@ void changeValue(Plateau *plateau, int valueFrom, int valueTo){
     }
 }
 
-int ifAllValueProcessed(int x, int y,int tab[x][y]){
-    int result = 0;
+int ifAllValueProcessed(int x, int y,int **tab){
     for(int i = 1;i<x-1;i++){
         for(int j = 1;j<y-1;j++){
-            if(tab[i][j] == 0) result = 1;
+            if(tab[i][j] == 0) return 1;
         }
     }
-    return result;
+    return 0;
 }
 
 

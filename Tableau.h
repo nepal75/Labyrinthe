@@ -25,7 +25,7 @@ void createLabyrynthe(Plateau *plateau);
 //Change value of all cell with one specific value
 void changeValue(Plateau *plateau, int valueFrom, int valueTo);
 //Check if all cell was process
-int ifAllValueProcessed(int x, int y,int tab[x][y]);
+int ifAllValueProcessed(int x, int y,int **tab);
 //Add entry and exit
 void addEntryExit(Plateau *plateau);
 
