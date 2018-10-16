@@ -42,8 +42,10 @@ void newLabyrinthe(){
 void redirect(int choix){
     switch (choix){
         case 1: newLabyrinthe();
+                redirect(printMenu());
             break;
         case 2: loadLabyrinthe();
+                redirect(printMenu());
             break;
     }
 }
@@ -96,8 +98,8 @@ Plateau* loadLabyrinthe(){
             }
             if(strcmp(nom_2,nom) == 0) break;
             else{
-                for(int i = 0; i<strlen(nom_2);i++){
-                    nom_2[i] = '0';
+                for(int i = 0; i<10;i++){
+                    nom_2[i] = '\0';
                 }
                 cmp = 0;
             }
@@ -156,12 +158,13 @@ Plateau* loadLabyrinthe(){
                 valeur[cmp] = car;
                 car = fgetc(file);
             }
+            else valeur[cmp + 1] = 0;
             sscanf(valeur,"%d",&plat->tab[i][j]);
         }
     }
 
     fclose(file);
-    printf("%s loaded :\n", plat->nom);
+    printf("%s loaded : x = %d y = %d\n", plat->nom,plat->x, plat->y);
     afficherPlateau(plat);
 
     return plat;
