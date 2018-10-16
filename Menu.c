@@ -44,6 +44,7 @@ void redirect(int choix){
         case 1: newLabyrinthe();
             break;
         case 2: loadLabyrinthe();
+            break;
     }
 }
 
@@ -102,8 +103,6 @@ Plateau* loadLabyrinthe(){
             }
         }
     }
-    Plateau *plat = malloc(sizeof(Plateau));
-    assert(plat != NULL);
     car = fgetc(file);
     car = fgetc(file);
     car = fgetc(file);
@@ -128,10 +127,42 @@ Plateau* loadLabyrinthe(){
             car = fgetc(file);
         }
     }
-    sscanf(largeurL,"%d",&plat->x);
-    sscanf(longueurL,"%d",&plat->y);
+    int longTab;
+    int largTab;
+    sscanf(largeurL,"%d",&largTab);
+    sscanf(longueurL,"%d",&longTab);
+
+    Plateau *plat = malloc(sizeof(Plateau));
+    assert(plat != NULL);
+
+    plat->x = largTab;
+    plat->y = longTab;
+    strcpy(plat->nom,nom);
+
+    initPlateau_0(plat);
+
+    car = fgetc(file);
+
+    char valeur[3];
+
+    for(int i = 0;i<plat->x;i++){
+        for(int j = 0;j<plat->y;j++){
+            if (car == ' ') car = fgetc(file);
+            cmp = 0;
+            valeur[cmp] = car;
+            car = fgetc(file);
+            if(car != ' ') {
+                cmp++;
+                valeur[cmp] = car;
+                car = fgetc(file);
+            }
+            sscanf(valeur,"%d",&plat->tab[i][j]);
+        }
+    }
 
     fclose(file);
-    printf("%d\n",plat->x);
-    printf("%d",plat->y);
+    printf("%s loaded :\n", plat->nom);
+    afficherPlateau(plat);
+
+    return plat;
 }
