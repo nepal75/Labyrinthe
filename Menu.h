@@ -17,4 +17,5 @@ int printMenu();
 void redirect(int choix);
 void newLabyrinthe();
 void createFile(Plateau *plateau);
+Plateau* loadLabyrinthe();
 #endif //LABYRINTHE_MENU_H
