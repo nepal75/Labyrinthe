@@ -2,11 +2,12 @@
 // Created by root on 10/10/18.
 //
 
+#include <printf.h>
 #include "Menu.h"
 
 int printMenu(){
     int choix;
-    printf("Que faire ?\n (1) Créer un labyrinthe ?\n (2) Charger un labyrinthe\n");
+    printf("Que faire ?\n (1) Créer un labyrinthe ?\n (2) Charger un labyrinthe\n (3) Jouer\n (4) Quitter\n");
     scanf("%d",&choix);
     return choix;
 }
@@ -39,14 +40,18 @@ void newLabyrinthe(){
     createFile(plat);
 }
 
-void redirect(int choix){
+void redirect(int choix,Plateau *plateau){
     switch (choix){
         case 1: newLabyrinthe();
-                redirect(printMenu());
+                redirect(printMenu(),plateau);
             break;
-        case 2: loadLabyrinthe();
-                redirect(printMenu());
+        case 2: plateau = loadLabyrinthe();
+                redirect(printMenu(),plateau);
             break;
+        case 3: assert(plateau!=NULL);
+                jouer(plateau);
+            break;
+        case 4: break;
     }
 }
 
@@ -168,4 +173,71 @@ Plateau* loadLabyrinthe(){
     afficherPlateau(plat);
 
     return plat;
+}
+
+void jouer(Plateau* plateau){
+    int result = 0;
+    char direction;
+    Joueur *joueur = initJoueur();
+    afficherPlateauDeJeu(plateau,joueur);
+    while(result == 0){
+        viderBuffer();
+        printf("Que faire ?\n (z) haut\n (q) gauche\n (s) bas\n (d) droite\n");
+        scanf("%c", &direction);
+        result = deplacement(plateau,joueur,direction);
+    }
+
+}
+
+int deplacement(Plateau *plateau, Joueur *joueur, char direction){
+    switch (direction){
+        case 'z':
+            if(joueur->x-1 > 0 &&
+               plateau->tab[joueur->x -1][joueur->y] != 0){
+            joueur->x --;
+            afficherPlateauDeJeu(plateau,joueur);
+            }
+            else printf("Deplacement impossible\n");
+            break;
+        case 'q':
+            if(joueur->y-1 > 0 &&
+               plateau->tab[joueur->x][joueur->y-1] != 0){
+                joueur->y --;
+                afficherPlateauDeJeu(plateau,joueur);
+            }
+            else printf("Deplacement impossible\n");
+            break;
+        case 's':
+            if(joueur->x+1 > 0 &&
+               plateau->tab[joueur->x+1][joueur->y] != 0){
+                joueur->x ++;
+                afficherPlateauDeJeu(plateau,joueur);
+            }
+            else printf("Deplacement impossible\n");
+            break;
+        case 'd':
+            if(joueur->y+1 > 0 &&
+               plateau->tab[joueur->x][joueur->y+1] != 0){
+                joueur->y ++;
+                afficherPlateauDeJeu(plateau,joueur);
+            }
+            else printf("Deplacement impossible\n");
+            break;
+    }
+
+    if(joueur->x == plateau->x-2 &&
+       joueur->y == plateau->y-1){
+        printf("C'est la win !\nEt merceee\n");
+        return 1;
+    }
+    else return 0;
+}
+
+void viderBuffer()
+{
+    int c = 0;
+    while (c != '\n' && c != EOF)
+    {
+        c = getchar();
+    }
 }

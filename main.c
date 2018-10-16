@@ -7,8 +7,8 @@
 
 int main() {
     srand(time(NULL));
-
-    redirect(printMenu());
+    Plateau *plateau = NULL;
+    redirect(printMenu(),plateau);
 
     return 0;
 }

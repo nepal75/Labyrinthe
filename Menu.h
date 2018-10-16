@@ -14,8 +14,11 @@
 #include <string.h>
 
 int printMenu();
-void redirect(int choix);
+void redirect(int choix, Plateau *plateau);
 void newLabyrinthe();
 void createFile(Plateau *plateau);
 Plateau* loadLabyrinthe();
+void jouer(Plateau* plateau);
+int deplacement(Plateau *plateau, Joueur *joueur, char direction);
+void viderBuffer();
 #endif //LABYRINTHE_MENU_H

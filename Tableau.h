@@ -15,6 +15,11 @@ typedef struct {
     char nom[10];
 } Plateau;
 
+typedef struct {
+    int x;
+    int y;
+} Joueur;
+
 //Initialize each cell to 0
 void initPlateau_0(Plateau *plateau);
 //print plateau
@@ -29,5 +34,8 @@ void changeValue(Plateau *plateau, int valueFrom, int valueTo);
 int ifAllValueProcessed(int x, int y,int **tab);
 //Add entry and exit
 void addEntryExit(Plateau *plateau);
+
+void afficherPlateauDeJeu(Plateau *plateau,Joueur *joueur);
+Joueur* initJoueur();
 
 #endif //LABYRINTHE_TABLEAU_H

@@ -121,3 +121,29 @@ void addEntryExit(Plateau *plateau){
     plateau->tab[1][0] = 1;
     plateau->tab[plateau->x-2][plateau->y-1] = 1;
 }
+
+Joueur* initJoueur(){
+    Joueur *joueur = malloc(sizeof(Joueur));
+    assert(joueur != NULL);
+
+    joueur->x = 1;
+    joueur->y = 0;
+}
+
+void afficherPlateauDeJeu(Plateau *plateau,Joueur *joueur){
+    char toPrint;
+    for(int i = 0; i < plateau->x; i++){
+        for(int j = 0; j < plateau->y; j++){
+            if(i == joueur->x && j == joueur->y){
+                printf("o ");
+            }
+            else{
+                int val = plateau->tab[i][j];
+                if(val != 0) printf("  ");
+                else printf("# ");
+            }
+        }
+        printf("\n");
+    }
+    printf("\n\n");
+}
