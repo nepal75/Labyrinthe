@@ -21,4 +21,7 @@ Plateau* loadLabyrinthe();
 void jouer(Plateau* plateau);
 int deplacement(Plateau *plateau, Joueur *joueur, char direction);
 void viderBuffer();
+void cheat(Plateau *plateau);
+void addTrap(Plateau *plateau);
+void addGifts(Plateau *plateau);
 #endif //LABYRINTHE_MENU_H

@@ -7,7 +7,7 @@
 
 int printMenu(){
     int choix;
-    printf("Que faire ?\n (1) Créer un labyrinthe ?\n (2) Charger un labyrinthe\n (3) Jouer\n (4) Quitter\n");
+    printf("Que faire ?\n (1) Créer un labyrinthe ?\n (2) Charger un labyrinthe\n (3) Jouer\n (4) Quitter\n (5) Cheat\n");
     scanf("%d",&choix);
     return choix;
 }
@@ -36,6 +36,8 @@ void newLabyrinthe(){
     initPlateau_Mur(plat);
 
     createLabyrynthe(plat);
+    addTrap(plat);
+    addGifts(plat);
     afficherPlateau(plat);
     createFile(plat);
 }
@@ -52,6 +54,10 @@ void redirect(int choix,Plateau *plateau){
                 jouer(plateau);
             break;
         case 4: break;
+        case 5: assert(plateau!= NULL);
+                cheat(plateau);
+                redirect(printMenu(),plateau);
+            break;
     }
 }
 
@@ -150,7 +156,7 @@ Plateau* loadLabyrinthe(){
 
     car = fgetc(file);
 
-    char valeur[3];
+    char valeur[4];
 
     for(int i = 0;i<plat->x;i++){
         for(int j = 0;j<plat->y;j++){
@@ -158,12 +164,12 @@ Plateau* loadLabyrinthe(){
             cmp = 0;
             valeur[cmp] = car;
             car = fgetc(file);
-            if(car != ' ') {
+            while(car != ' ') {
                 cmp++;
                 valeur[cmp] = car;
                 car = fgetc(file);
             }
-            else valeur[cmp + 1] = 0;
+            valeur[cmp + 1] = '\0';
             sscanf(valeur,"%d",&plat->tab[i][j]);
         }
     }
@@ -194,8 +200,20 @@ int deplacement(Plateau *plateau, Joueur *joueur, char direction){
         case 'z':
             if(joueur->x-1 > 0 &&
                plateau->tab[joueur->x -1][joueur->y] != 0){
-            joueur->x --;
-            afficherPlateauDeJeu(plateau,joueur);
+                joueur->x --;
+                joueur->score ++;
+                afficherPlateauDeJeu(plateau,joueur);
+                if(plateau->tab[joueur->x][joueur->y] == -1){
+                    printf("Vous avez marché sur un piège, moins 2 points.\n");
+                    joueur->score += 2;
+                    plateau->tab[joueur->x][joueur->y]=1;
+                }
+                else if(plateau->tab[joueur->x][joueur->y] == -2){
+                    printf("Trésor récolté, + 3 points !\n");
+                    joueur->score -= 3;
+                    plateau->tab[joueur->x][joueur->y]=1;
+                }
+                printf("Score actuel : %d\n\n",joueur->score);
             }
             else printf("Deplacement impossible\n");
             break;
@@ -203,7 +221,19 @@ int deplacement(Plateau *plateau, Joueur *joueur, char direction){
             if(joueur->y-1 > 0 &&
                plateau->tab[joueur->x][joueur->y-1] != 0){
                 joueur->y --;
+                joueur->score ++;
                 afficherPlateauDeJeu(plateau,joueur);
+                if(plateau->tab[joueur->x][joueur->y] == -1){
+                    printf("Vous avez marché sur un piège, moins 2 points.\n");
+                    joueur->score += 2;
+                    plateau->tab[joueur->x][joueur->y]=1;
+                }
+                else if(plateau->tab[joueur->x][joueur->y] == -2){
+                    printf("Trésor récolté, + 3 points !\n");
+                    joueur->score -= 3;
+                    plateau->tab[joueur->x][joueur->y]=1;
+                }
+                printf("Score actuel : %d\n\n",joueur->score);
             }
             else printf("Deplacement impossible\n");
             break;
@@ -211,7 +241,19 @@ int deplacement(Plateau *plateau, Joueur *joueur, char direction){
             if(joueur->x+1 > 0 &&
                plateau->tab[joueur->x+1][joueur->y] != 0){
                 joueur->x ++;
+                joueur->score ++;
                 afficherPlateauDeJeu(plateau,joueur);
+                if(plateau->tab[joueur->x][joueur->y] == -1){
+                    printf("Vous avez marché sur un piège, moins 2 points.\n");
+                    joueur->score += 2;
+                    plateau->tab[joueur->x][joueur->y]=1;
+                }
+                else if(plateau->tab[joueur->x][joueur->y] == -2){
+                    printf("Trésor récolté, + 3 points !\n");
+                    joueur->score -= 3;
+                    plateau->tab[joueur->x][joueur->y]=1;
+                }
+                printf("Score actuel : %d\n\n",joueur->score);
             }
             else printf("Deplacement impossible\n");
             break;
@@ -219,7 +261,19 @@ int deplacement(Plateau *plateau, Joueur *joueur, char direction){
             if(joueur->y+1 > 0 &&
                plateau->tab[joueur->x][joueur->y+1] != 0){
                 joueur->y ++;
+                joueur->score ++;
                 afficherPlateauDeJeu(plateau,joueur);
+                if(plateau->tab[joueur->x][joueur->y] == -1){
+                    printf("Vous avez marché sur un piège, moins 2 points.\n");
+                    joueur->score += 2;
+                    plateau->tab[joueur->x][joueur->y]=1;
+                }
+                else if(plateau->tab[joueur->x][joueur->y] == -2){
+                    printf("Trésor récolté, + 3 points !\n");
+                    joueur->score -= 3;
+                    plateau->tab[joueur->x][joueur->y]=1;
+                }
+                printf("Score actuel : %d\n\n",joueur->score);
             }
             else printf("Deplacement impossible\n");
             break;
@@ -227,7 +281,7 @@ int deplacement(Plateau *plateau, Joueur *joueur, char direction){
 
     if(joueur->x == plateau->x-2 &&
        joueur->y == plateau->y-1){
-        printf("C'est la win !\nEt merceee\n");
+        printf("C'est la win !\nAvec un score de %d\nEt merceee\n",joueur->score);
         return 1;
     }
     else return 0;
@@ -240,4 +294,53 @@ void viderBuffer()
     {
         c = getchar();
     }
+}
+
+void cheat(Plateau *plateau){
+    int casePassage = 0;
+    for(int i = 0;i<plateau->x;i++){
+        for (int j = 0;j<plateau->y;j++){
+            if(plateau->tab[i][j] != 0) casePassage++;
+        }
+    }
+    printf("Nb de cases ""passage"" : %d",casePassage);
+}
+
+void addTrap(Plateau *plateau){
+    int casePassage = 0;
+    for(int i = 0;i<plateau->x;i++){
+        for (int j = 0;j<plateau->y;j++){
+            if(plateau->tab[i][j] != 0) casePassage++;
+        }
+    }
+
+    int nbTrap = 0;
+    while(nbTrap < casePassage/10){
+        int r_1 = rand()%(plateau->x - 2) + 1;
+        int r_2 = rand()%(plateau->y - 2) + 1;
+        if(plateau->tab[r_1][r_2] > 0){
+            plateau->tab[r_1][r_2] = -1;
+            nbTrap++;
+        }
+    }
+}
+
+void addGifts(Plateau *plateau){
+    int casePassage = 0;
+    for(int i = 0;i<plateau->x;i++){
+        for (int j = 0;j<plateau->y;j++){
+            if(plateau->tab[i][j] != 0) casePassage++;
+        }
+    }
+
+    int nbGifts = 0;
+    while(nbGifts < casePassage/15){
+        int r_1 = rand()%(plateau->x - 2) + 1;
+        int r_2 = rand()%(plateau->y - 2) + 1;
+        if(plateau->tab[r_1][r_2] > 0){
+            plateau->tab[r_1][r_2] = -2;
+            nbGifts++;
+        }
+    }
+
 }

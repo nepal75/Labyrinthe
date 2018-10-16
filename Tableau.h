@@ -18,6 +18,7 @@ typedef struct {
 typedef struct {
     int x;
     int y;
+    int score;
 } Joueur;
 
 //Initialize each cell to 0

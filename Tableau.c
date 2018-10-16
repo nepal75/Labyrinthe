@@ -28,7 +28,9 @@ void afficherPlateau(Plateau *plateau){
     for(int i = 0; i < plateau->x; i++){
         for(int j = 0; j < plateau->y; j++){
             int val = plateau->tab[i][j];
-            if(val != 0) printf("  ");
+            if(val > 0) printf("  ");
+            else if(val == -1) printf("x ");
+            else if(val == -2) printf("§ ");
             else printf("# ");
         }
         printf("\n");
@@ -128,6 +130,7 @@ Joueur* initJoueur(){
 
     joueur->x = 1;
     joueur->y = 0;
+    joueur->score = 0;
 }
 
 void afficherPlateauDeJeu(Plateau *plateau,Joueur *joueur){
@@ -139,7 +142,9 @@ void afficherPlateauDeJeu(Plateau *plateau,Joueur *joueur){
             }
             else{
                 int val = plateau->tab[i][j];
-                if(val != 0) printf("  ");
+                if(val > 0) printf("  ");
+                else if(val == -1) printf("x ");
+                else if(val == -2) printf("§ ");
                 else printf("# ");
             }
         }
