@@ -9,13 +9,14 @@
 
 
 void initPlateau_0(Plateau *plateau){
+    //Init the labyrinthe
     plateau->tab = malloc(sizeof(*plateau->tab)*plateau->x);
     assert(plateau->tab!=NULL);
     for(int x = 0; x<plateau->x; x++){
         plateau->tab[x] = malloc(sizeof(int)*plateau->y);
         assert(plateau->tab[x]!=NULL);
     }
-
+    //And place a 0 on every cell
     for (int i = 0;i<plateau->x;i++){
         for(int j = 0; j<plateau->y;j++){
             plateau->tab[i][j] = 0;
@@ -28,6 +29,8 @@ void afficherPlateau(Plateau *plateau){
     for(int i = 0; i < plateau->x; i++){
         for(int j = 0; j < plateau->y; j++){
             int val = plateau->tab[i][j];
+            /*Choose wich caractere to print selon the cell's value
+              the space at the end is for a better printing*/
             if(val > 0) printf("  ");
             else if(val == -1) printf("x ");
             else if(val == -2) printf("§ ");
@@ -40,6 +43,7 @@ void afficherPlateau(Plateau *plateau){
 
 
 void initPlateau_Mur(Plateau *plateau){
+    //Place all the wall into the labyrinthe
     int compteur = 1;
     for(int i = 0;i<plateau->x;i++){
         if(i%2 == 1){
@@ -55,6 +59,7 @@ void initPlateau_Mur(Plateau *plateau){
 
 
 void createLabyrynthe(Plateau *plateau){
+    //create a matrice to be sur than all cell will be randomly choose
     int **tabTest;
 
     tabTest = malloc(sizeof(*tabTest)*plateau->x);
@@ -63,13 +68,14 @@ void createLabyrynthe(Plateau *plateau){
         tabTest[x] = malloc(sizeof(int)*plateau->y);
         assert(tabTest[x]!=NULL);
     }
-
+    //And place a 0 in every cell
     for (int i = 0;i<plateau->x;i++){
         for(int j = 0; j<plateau->y;j++){
             tabTest[i][j] = 0;
         }
     }
 
+    //While all cell was'nt choose, choose one randomly
     while(ifAllValueProcessed(plateau->x,plateau->y,tabTest)) {
         int r_1 = rand()%(plateau->x - 2) + 1;
         int r_2 = rand()%(plateau->y - 2) + 1;
@@ -137,6 +143,7 @@ void afficherPlateauDeJeu(Plateau *plateau,Joueur *joueur){
     char toPrint;
     for(int i = 0; i < plateau->x; i++){
         for(int j = 0; j < plateau->y; j++){
+            //But this time with the player's position
             if(i == joueur->x && j == joueur->y){
                 printf("o ");
             }

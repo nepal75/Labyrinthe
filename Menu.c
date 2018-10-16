@@ -23,7 +23,7 @@ void newLabyrinthe(){
     printf("Quel nom lui donner ?(10 carac max)\n");
     scanf("%s",&nom);
 
-
+    //Create the labyrinthe
     Plateau *plat = malloc(sizeof(Plateau));
     assert(plat != NULL);
 
@@ -39,10 +39,13 @@ void newLabyrinthe(){
     addTrap(plat);
     addGifts(plat);
     afficherPlateau(plat);
-    createFile(plat);
+
+    //And add it to the .cfg file
+    addToFile(plat);
 }
 
 void redirect(int choix,Plateau *plateau){
+    //If there is no labyrinthe loaded, plateau will be always NULL
     switch (choix){
         case 1: newLabyrinthe();
                 redirect(printMenu(),plateau);
@@ -54,18 +57,15 @@ void redirect(int choix,Plateau *plateau){
                 jouer(plateau);
             break;
         case 4: break;
-        case 5: assert(plateau!= NULL);
-                cheat(plateau);
-                redirect(printMenu(),plateau);
-            break;
     }
 }
 
-void createFile(Plateau *plateau){
+void addToFile(Plateau *plateau){
     char str[12];
     FILE *file = NULL;
     file = fopen("/tmp/labyrinthe.cfg","a");
     assert(file != NULL);
+    //Add name, width and length with a specific synthax
     fputs("/",file);
     fputs(plateau->nom,file);
     fputs(" x:",file);
@@ -76,6 +76,7 @@ void createFile(Plateau *plateau){
     fputs(str,file);
     fputs("\n",file);
 
+    //Add all cell's values
     for(int i = 0;i<plateau->x;i++){
         for(int j=0;j<plateau->y;j++){
             sprintf(str,"%d",plateau->tab[i][j]);
@@ -99,6 +100,7 @@ Plateau* loadLabyrinthe(){
     file = fopen("/tmp/labyrinthe.cfg","r");
     assert(file!=NULL);
     while(car != EOF){
+        //First, find the right labyrinthe
         car = fgetc(file);
         if(car == '/'){
             car = fgetc(file);
@@ -116,6 +118,7 @@ Plateau* loadLabyrinthe(){
             }
         }
     }
+    //Second, get his dimensions
     car = fgetc(file);
     car = fgetc(file);
     car = fgetc(file);
@@ -145,6 +148,7 @@ Plateau* loadLabyrinthe(){
     sscanf(largeurL,"%d",&largTab);
     sscanf(longueurL,"%d",&longTab);
 
+    //Third init the labyrinthe with his dimension
     Plateau *plat = malloc(sizeof(Plateau));
     assert(plat != NULL);
 
@@ -154,6 +158,7 @@ Plateau* loadLabyrinthe(){
 
     initPlateau_0(plat);
 
+    //And then, catch all his cell's values
     car = fgetc(file);
 
     char valeur[4];
@@ -175,7 +180,7 @@ Plateau* loadLabyrinthe(){
     }
 
     fclose(file);
-    printf("%s loaded : x = %d y = %d\n", plat->nom,plat->x, plat->y);
+    printf("%s loaded\n", plat->nom);
     afficherPlateau(plat);
 
     return plat;
@@ -184,9 +189,11 @@ Plateau* loadLabyrinthe(){
 void jouer(Plateau* plateau){
     int result = 0;
     char direction;
+    //Place the player at his position start
     Joueur *joueur = initJoueur();
     afficherPlateauDeJeu(plateau,joueur);
     while(result == 0){
+        //Allow it to move
         viderBuffer();
         printf("Que faire ?\n (z) haut\n (q) gauche\n (s) bas\n (d) droite\n");
         scanf("%c", &direction);
@@ -203,6 +210,7 @@ int deplacement(Plateau *plateau, Joueur *joueur, char direction){
                 joueur->x --;
                 joueur->score ++;
                 afficherPlateauDeJeu(plateau,joueur);
+                //If he walk on a gift or a trap
                 if(plateau->tab[joueur->x][joueur->y] == -1){
                     printf("Vous avez marché sur un piège, moins 2 points.\n");
                     joueur->score += 2;
@@ -215,6 +223,7 @@ int deplacement(Plateau *plateau, Joueur *joueur, char direction){
                 }
                 printf("Score actuel : %d\n\n",joueur->score);
             }
+            //Or a wall
             else printf("Deplacement impossible\n");
             break;
         case 'q':
@@ -278,10 +287,11 @@ int deplacement(Plateau *plateau, Joueur *joueur, char direction){
             else printf("Deplacement impossible\n");
             break;
     }
-
+    //If he finished the labyrinthe
     if(joueur->x == plateau->x-2 &&
        joueur->y == plateau->y-1){
         printf("C'est la win !\nAvec un score de %d\nEt merceee\n",joueur->score);
+        addScore(plateau,joueur->score);
         return 1;
     }
     else return 0;
@@ -296,24 +306,15 @@ void viderBuffer()
     }
 }
 
-void cheat(Plateau *plateau){
-    int casePassage = 0;
-    for(int i = 0;i<plateau->x;i++){
-        for (int j = 0;j<plateau->y;j++){
-            if(plateau->tab[i][j] != 0) casePassage++;
-        }
-    }
-    printf("Nb de cases ""passage"" : %d",casePassage);
-}
-
 void addTrap(Plateau *plateau){
+    //Count how many cell which are not a wall exist
     int casePassage = 0;
     for(int i = 0;i<plateau->x;i++){
         for (int j = 0;j<plateau->y;j++){
             if(plateau->tab[i][j] != 0) casePassage++;
         }
     }
-
+    //And change 10% of them to a trap
     int nbTrap = 0;
     while(nbTrap < casePassage/10){
         int r_1 = rand()%(plateau->x - 2) + 1;
@@ -326,13 +327,14 @@ void addTrap(Plateau *plateau){
 }
 
 void addGifts(Plateau *plateau){
+    //Count how many cell which are not a wall exist
     int casePassage = 0;
     for(int i = 0;i<plateau->x;i++){
         for (int j = 0;j<plateau->y;j++){
             if(plateau->tab[i][j] != 0) casePassage++;
         }
     }
-
+    //And change 6,66% of them to a gift
     int nbGifts = 0;
     while(nbGifts < casePassage/15){
         int r_1 = rand()%(plateau->x - 2) + 1;
@@ -343,4 +345,10 @@ void addGifts(Plateau *plateau){
         }
     }
 
+}
+
+void addScore(Plateau *plateau,int score){
+    /*FILE *file = NULL;
+    file = fopen("/root/Documents/ENSICAEN/IntroProg/Labyrinthe/classique.score","a");
+    assert(file != NULL);*/
 }
